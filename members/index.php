@@ -1,4 +1,7 @@
+<?php
+session_start();
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,8 +40,8 @@
             </ul>
             <form method="post" action="../php/login.php" class="navbar-form navbar-right">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Username">
-                    <input type="text" class="form-control" placeholder="Password">
+                    <input name="email" type="text" class="form-control" placeholder="E-mail">
+                    <input type="password" name="pass" class="form-control" placeholder="Password">
                 </div>
                 <button type="submit" class="btn btn-default">Login</button>
             </form>
@@ -54,25 +57,38 @@
                 <li class="list-group-item"><a href="../request/index.php">Request Blood</a></li>
                 <li class="list-group-item"><a href="../view/index.php">Blood Requests</a></li>
                 <li class="list-group-item"><a href="../members/index.php">Community Members</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
+
             </ul>
         </div>
         <div class="col-sm-9 text-left">
             <!--actual content-->
+            <H3>Members</H3>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Group</th>
+                    <th>Contact</th>
+                    <th>Last Date</th>
+                </tr>
+                </thead>
+                <tbody>
 
+                <?php
+                include '../php/connection.php';
+                $sql='SELECT * FROM users;';
+                $run=mysqli_query($con,$sql);
+                while($row=mysqli_fetch_assoc($run)){ ?>
+                <tr>
+                    <td><?php echo $row['name'];?></td>
+                    <td><?php echo $row['blood_group'];?></td>
+                    <td><?php echo $row['contact'];?></td>
+                    <td><?php echo $row['last_donate_date'];?></td>
+                    <?php }
+                    ?>
+
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -87,18 +103,18 @@
 <!--login btn chng-->
 <?php
 if(!empty($_SESSION)){ ?>
-<script type='text/javascript'>
-    document.getElementById('myloginbtn').innerHTML="<a href=\"php/logout.php\" class=\"navbar-brand\">Logout,<?php echo $_SESSION['name'];?></a>";
-</script>
+    <script type='text/javascript'>
+        document.getElementById('myloginbtn').innerHTML="<a href=\"../php/logout.php\" class=\"navbar-brand\">Logout,<?php echo $_SESSION['name'];?></a>";
+    </script>
 <?php }
 ?>
 <!--        calling a toast -->
 <?php
 if(isset($_GET['toast'])){ ?>
-<script type="text/javascript">
-    Materialize.toast('<?php echo $_GET['status']?>', 3000, 'rounded');
+    <script type="text/javascript">
+        Materialize.toast('<?php echo $_GET['status']?>', 3000, 'rounded');
 
-</script>
+    </script>
 
 <?php }
 ?>
@@ -106,20 +122,20 @@ if(isset($_GET['toast'])){ ?>
 
 <!--Add extra menu for admin-->
 <?php
-if (isset($_SESSION)){
+if (!empty($_SESSION)){
     if($_SESSION['is_login']){
         if($_SESSION['email']=='admin@blood.com'){ ?>
-<script>
-    var li=document.createElement('li');
-    li.classList.add('list-group-item');
-    var anchor=document.createElement('a');
-    anchor.href='./admin/index.php';
-    anchor.innerHTML='Admin Panel';
-    li.appendChild(anchor);
-    document.getElementById('side_ul').appendChild(li);
-    //                <li class="list-group-item"><a href="../ad">Home</a></li>
-</script>
-<?php }
+            <script>
+                var li=document.createElement('li');
+                li.classList.add('list-group-item');
+                var anchor=document.createElement('a');
+                anchor.href='./admin/index.php';
+                anchor.innerHTML='Admin Panel';
+                li.appendChild(anchor);
+                document.getElementById('side_ul').appendChild(li);
+                //                <li class="list-group-item"><a href="../ad">Home</a></li>
+            </script>
+        <?php }
     }
 }
 ?>

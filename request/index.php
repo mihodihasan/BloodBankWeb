@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 ?>
 
 <!DOCTYPE html>
@@ -10,12 +9,11 @@ session_start();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/materialize.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/materialize.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/materialize.js"></script>
-</head>
+    <script type="text/javascript" src="../js/materialize.js"></script></head>
 <body>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
@@ -29,7 +27,7 @@ session_start();
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="index.php">Home</a></li>
+                <li class="active"><a href="../index.php">Home</a></li>
                 <li><a href="#">Who We Are</a></li>
                 <li><a href="#">Certifications</a></li>
                 <li><a href="#">Contact</a></li>
@@ -37,10 +35,10 @@ session_start();
 
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="signup/index.html"><span class="glyphicon glyphicon-log-in"></span>Sign up</a></li>
+                <li><a href="../signup/index.html"><span class="glyphicon glyphicon-log-in"></span>Sign up</a></li>
             </ul>
             <div id="myloginbtn" class="navbar-right">
-                <form method="post" action="php/login.php" class="navbar-form navbar-right">
+                <form method="post" action="../php/login.php" class="navbar-form navbar-right">
                     <div class="form-group">
                         <input name="email" type="text" class="form-control" placeholder="E-mail">
                         <input type="password" name="pass" class="form-control" placeholder="Password">
@@ -56,28 +54,52 @@ session_start();
     <div class="row content">
         <div class="col-sm-3 sidenav">
             <ul class="list-group" id="side_ul">
-                <li class="list-group-item"><a href="index.php">Home</a></li>
-                <li class="list-group-item"><a href="./request/index.php">Request Blood</a></li>
-                <li class="list-group-item"><a href="./view/index.php">Blood Requests</a></li>
-                <li class="list-group-item"><a href="./members/index.php">Community Members</a></li>
+                <li class="list-group-item"><a href="../index.php">Home</a></li>
+                <li class="list-group-item"><a href="../request/index.php">Request Blood</a></li>
+                <li class="list-group-item"><a href="../view/index.php">Blood Requests</a></li>
+                <li class="list-group-item"><a href="../members/index.php">Community Members</a></li>
 
             </ul>
         </div>
         <div class="col-sm-9 text-left">
             <!--actual content-->
-            <center>
-                <h3>
-                    We Are Social Workers
-                </h3>
-                <br>
-                <h3>Donate Your Blood</h3>
-                <br>
-                <h3>Save Lives</h3>
-                <br>
-                <h3>Your Blood Can Regenerate, One's Life can not</h3>
-                <br>
-                <h3>Join Us</h3>
-            </center>
+
+            <form action="../php/request.php" method="post">
+                <div class="form-group form-row col-md-12">
+                    <label for="name">Name</label>
+                    <input name="name" type="text" class="form-control" id="name" placeholder="Your Name">
+                </div>
+
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="group">Select list:</label>
+                        <select name="blood_group" class="form-control" id="group">
+                            <?php
+                            include '../php/connection.php';
+                            $result=mysqli_query($con,"SELECT * FROM blood_group;");
+                            while($row=mysqli_fetch_assoc($result)){ ?>
+                                <option value="<?php echo $row['id'];?>"><?php echo $row['group_name'];?></option>
+                            <?php }
+                            ?>
+
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="contact">Contact</label>
+                        <input type="tel" class="form-control" id="contact" name="contact" placeholder="Contact Number">
+                    </div>
+                </div>
+
+                <!--<div class="form-group">-->
+                <!--<div class="form-check">-->
+                <!--<label class="form-check-label">-->
+                <!--<input class="form-check-input" type="checkbox"> Keep Me Logged In-->
+                <!--</label>-->
+                <!--</div>-->
+                <!--</div>-->
+                <button type="submit" class="btn btn-primary right" style="float: right;">Request</button>
+            </form>
         </div>
     </div>
 </div>
@@ -88,11 +110,12 @@ session_start();
     <p>Copyrights &copy;2017</p>
 </footer>
 
+
 <!--login btn chng-->
 <?php
 if(!empty($_SESSION)){ ?>
     <script type='text/javascript'>
-        document.getElementById('myloginbtn').innerHTML="<a href=\"php/logout.php\" class=\"navbar-brand\">Logout,<?php echo $_SESSION['name'];?></a>";
+        document.getElementById('myloginbtn').innerHTML="<a href=\"../php/logout.php\" class=\"navbar-brand\">Logout,<?php echo $_SESSION['name'];?></a>";
     </script>
 <?php }
 ?>
@@ -121,16 +144,11 @@ if (!empty($_SESSION)){
                 anchor.innerHTML='Admin Panel';
                 li.appendChild(anchor);
                 document.getElementById('side_ul').appendChild(li);
-//                <li class="list-group-item"><a href="../ad">Home</a></li>
+                //                <li class="list-group-item"><a href="../ad">Home</a></li>
             </script>
         <?php }
     }
 }
 ?>
-
-<!--<script type="text/javascript" src="js/script.js"></script>-->
-
-
-
 </body>
 </html>

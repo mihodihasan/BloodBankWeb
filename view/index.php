@@ -1,4 +1,7 @@
+<?php
+session_start();
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +13,7 @@
     <link rel="stylesheet" href="../css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/materialize.js"></script>
+    <script type="text/javascript" src="../js/materialize.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -35,13 +38,15 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="../signup/index.html"><span class="glyphicon glyphicon-log-in"></span>Sign up</a></li>
             </ul>
-            <form method="post" action="../php/login.php" class="navbar-form navbar-right">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Username">
-                    <input type="text" class="form-control" placeholder="Password">
-                </div>
-                <button type="submit" class="btn btn-default">Login</button>
-            </form>
+            <div id="myloginbtn" class="navbar-right">
+                <form method="post" action="../php/login.php" class="navbar-form navbar-right">
+                    <div class="form-group">
+                        <input name="email" type="text" class="form-control" placeholder="E-mail">
+                        <input type="password" name="pass" class="form-control" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-default">Login</button>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
@@ -49,30 +54,42 @@
 <div class="container-fluid text-center">
     <div class="row content">
         <div class="col-sm-3 sidenav">
-            <ul class="list-group">
+            <ul class="list-group" id="side_ul">
                 <li class="list-group-item"><a href="../index.php">Home</a></li>
                 <li class="list-group-item"><a href="../request/index.php">Request Blood</a></li>
                 <li class="list-group-item"><a href="../view/index.php">Blood Requests</a></li>
                 <li class="list-group-item"><a href="../members/index.php">Community Members</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
-                <li class="list-group-item"><a>Sample</a></li>
+
             </ul>
         </div>
         <div class="col-sm-9 text-left">
             <!--actual content-->
+            <H3>Requests</H3>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Blood Group</th>
+                    <th>Contact</th>
+                </tr>
+                </thead>
+                <tbody>
 
+                <?php
+                include '../php/connection.php';
+                $sql='SELECT * FROM request;';
+                $run=mysqli_query($con,$sql);
+                while($row=mysqli_fetch_assoc($run)){ ?>
+                <tr>
+                    <td><?php echo $row['name'];?></td>
+                    <td><?php echo $row['blood'];?></td>
+                    <td><?php echo $row['contact'];?></td>
+
+                    <?php }
+                    ?>
+
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -87,18 +104,18 @@
 <!--login btn chng-->
 <?php
 if(!empty($_SESSION)){ ?>
-<script type='text/javascript'>
-    document.getElementById('myloginbtn').innerHTML="<a href=\"php/logout.php\" class=\"navbar-brand\">Logout,<?php echo $_SESSION['name'];?></a>";
-</script>
+    <script type='text/javascript'>
+        document.getElementById('myloginbtn').innerHTML="<a href=\"../php/logout.php\" class=\"navbar-brand\">Logout,<?php echo $_SESSION['name'];?></a>";
+    </script>
 <?php }
 ?>
 <!--        calling a toast -->
 <?php
 if(isset($_GET['toast'])){ ?>
-<script type="text/javascript">
-    Materialize.toast('<?php echo $_GET['status']?>', 3000, 'rounded');
+    <script type="text/javascript">
+        Materialize.toast('<?php echo $_GET['status']?>', 3000, 'rounded');
 
-</script>
+    </script>
 
 <?php }
 ?>
@@ -106,20 +123,20 @@ if(isset($_GET['toast'])){ ?>
 
 <!--Add extra menu for admin-->
 <?php
-if (isset($_SESSION)){
+if (!empty($_SESSION)){
     if($_SESSION['is_login']){
         if($_SESSION['email']=='admin@blood.com'){ ?>
-<script>
-    var li=document.createElement('li');
-    li.classList.add('list-group-item');
-    var anchor=document.createElement('a');
-    anchor.href='./admin/index.php';
-    anchor.innerHTML='Admin Panel';
-    li.appendChild(anchor);
-    document.getElementById('side_ul').appendChild(li);
-    //                <li class="list-group-item"><a href="../ad">Home</a></li>
-</script>
-<?php }
+            <script>
+                var li=document.createElement('li');
+                li.classList.add('list-group-item');
+                var anchor=document.createElement('a');
+                anchor.href='./admin/index.php';
+                anchor.innerHTML='Admin Panel';
+                li.appendChild(anchor);
+                document.getElementById('side_ul').appendChild(li);
+                //                <li class="list-group-item"><a href="../ad">Home</a></li>
+            </script>
+        <?php }
     }
 }
 ?>
