@@ -11,10 +11,11 @@ if (isset($_SESSION)){
 if (!empty($_GET['id'])) {
     include 'connection.php';
     $id=$_GET['id'];
-    $sql = "DELETE FROM users WHERE id='".$id."';";
+    $sql = "DELETE FROM request WHERE id='".$id."';";
     $result=mysqli_query($con,$sql);
     if ($result) {
-        header('Location: ../admin/index.php?toast=t&status=Successfully Blocked!');
+        header('Location: ../admin/index.php?toast=t&status=Successfully Deleted!');
+//        echo $sql;
     }else{
         header('Location: ../admin/index.php?toast=t&status=Error');
 //        echo $sql;

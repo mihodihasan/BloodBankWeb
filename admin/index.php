@@ -136,14 +136,13 @@ if (isset($_SESSION)){
             </table>
 
             <br>
-            <H3>Members</H3>
+            <H3>Requests</H3>
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>Name</th>
                     <th>Group</th>
                     <th>Contact</th>
-                    <th>Last Date</th>
                     <th>Block/Delete</th>
                 </tr>
                 </thead>
@@ -151,15 +150,14 @@ if (isset($_SESSION)){
 
                 <?php
                 include '../php/connection.php';
-                $sql='SELECT * FROM users;';
+                $sql='SELECT * FROM request;';
                 $run=mysqli_query($con,$sql);
                 while($row=mysqli_fetch_assoc($run)){ ?>
                 <tr>
                     <td><?php echo $row['name'];?></td>
-                    <td><?php echo $row['blood_group'];?></td>
+                    <td><?php echo $row['blood'];?></td>
                     <td><?php echo $row['contact'];?></td>
-                    <td><?php echo $row['last_donate_date'];?></td>
-                    <td><a href="../php/delete.php?id=<?php echo $row['id'];?>">Block/Delete</a></td>
+                    <td><a href="../php/deleteRequest.php?id=<?php echo $row['id'];?>">Delete</a></td>
                     <?php }
                     ?>
 
@@ -168,7 +166,7 @@ if (isset($_SESSION)){
         </div>
     </div>
 </div>
-
+<br><br><br><br><br><br><br>
 
 <footer class="navbar-fixed-bottom container-fluid text-center">
     <p>All rights Reserved To Company</p>

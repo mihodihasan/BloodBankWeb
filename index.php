@@ -82,7 +82,7 @@ session_start();
     </div>
 </div>
 
-
+<br><br><br><br><br><br><br>
 <footer class="navbar-fixed-bottom container-fluid text-center">
     <p>All rights Reserved To Company</p>
     <p>Copyrights &copy;2017</p>
